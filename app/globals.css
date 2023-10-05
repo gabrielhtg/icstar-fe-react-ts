@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -24,4 +24,36 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+} */
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+.btn {
+  font-family: "Poppins", sans-serif;
+}
+
+.alert {
+  animation-name: atasKeBawah;
+  animation-duration: 1.9s;
+  animation-timing-function: ease;
+}
+
+@keyframes atasKeBawah {
+  0% {
+    transform: translateY(0px);
+  }
+
+  15% {
+    transform: translateY(240px);
+  }
+
+  85% {
+    transform: translateY(230px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
 }
