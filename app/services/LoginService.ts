@@ -22,7 +22,10 @@ export default async function LoginService(
     })
     .then(() => {
       alertService(null, "Login Success");
-      router.push("/dashboard");
+
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 2000);
     })
     .catch((e) => {
       if (e.response.status === 400) {
@@ -31,7 +34,7 @@ export default async function LoginService(
       }
 
       if (e.response.status === 401) {
-        alertService(null, "Login failed.");
+        alertService("error", "Login failed.");
         console.log(e.response.data.message);
       }
     });

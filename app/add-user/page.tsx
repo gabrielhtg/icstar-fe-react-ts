@@ -7,6 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import fileToBlob from "../services/fileToBlob";
 import axios from "axios";
 import APILink from "../entities/APILink";
+import alertService from "../services/alertService";
 
 const AddUser = () => {
   const [fotoProfil, setFotoProfil] = useState<any>();
@@ -70,19 +71,33 @@ const AddUser = () => {
                   accept=".png, .jpg, .jpeg"
                   className="file-input file-input-bordered w-full"
                   onChange={() => {
-                    let inputFoto = document.querySelector("#input-foto");
-                    let elementFotoBaru =
+                    const inputFoto =
+                      document.querySelector<HTMLInputElement>("#input-foto");
+                    const elementFotoBaru =
                       document.querySelector("#foto-profil-baru");
+                    const logoProfil = document.querySelector("#logo-profil");
 
-                    let logoProfil = document.querySelector("#logo-profil");
+                    if (inputFoto!.files !== null) {
+                      const selectedFile = inputFoto!.files[0];
 
-                    setFotoProfil(fileToBlob(inputFoto));
+                      const maxFileSize = 5 * 1024 * 1024; // 5 MB
 
-                    elementFotoBaru?.classList.remove("hidden");
-                    logoProfil?.classList.add("hidden");
+                      if (selectedFile && selectedFile.size <= maxFileSize) {
+                        setFotoProfil(fileToBlob(inputFoto));
+
+                        elementFotoBaru?.classList.remove("hidden");
+                        logoProfil?.classList.add("hidden");
+                      } else {
+                        alertService("error", "Photo size is too large!");
+                        inputFoto!.value = "";
+                      }
+                    }
                   }}
                 />
               </div>
+              <span className=" self-start mt-2 text-error font-semibold text-sm ml-2">
+                Max File Size 5MB
+              </span>
             </div>
 
             <div className="divider md:divider-horizontal"></div>
@@ -190,8 +205,6 @@ const AddUser = () => {
                   passwordValue === rePasswordValue &&
                   (passwordValue !== "" || rePasswordValue !== "")
                 ) {
-                  let url = link.registerUser;
-
                   const reqBody = {
                     email: emailValue,
                     password: passwordValue,
@@ -200,10 +213,8 @@ const AddUser = () => {
                     admin: setAdmin,
                   };
 
-                  console.log(reqBody);
-
                   axios
-                    .post(url, reqBody)
+                    .post(APILink.registerUser, reqBody)
                     .then((r) => {
                       if (r.status === 200) {
                         if (inputFoto.current?.files != null) {
@@ -213,20 +224,32 @@ const AddUser = () => {
                           );
 
                           axios
-                            .post(link.registerFotoProfil, formData, {
+                            .post(APILink.registerFotoProfil, formData, {
                               headers: {
                                 "Content-Type": "multipart/form-data",
                                 email: emailValue,
                               },
                             })
                             .then((r) => {
-                              console.log(r.status);
+                              alertService(null, "Success Adding New User");
                             })
-                            .catch((e) => {});
+                            .catch((e) => {
+                              alertService(
+                                "error",
+                                `Failed to add new user. Error ${e.data.message}`
+                              );
+                            });
                         }
                       }
                     })
-                    .catch((e) => {});
+                    .catch((e) => {
+                      alertService(
+                        "error",
+                        `Failed to add new user. Error ${e.data.message}`
+                      );
+                    });
+                } else if (passwordValue !== rePasswordValue) {
+                  alertService("error", "Password Not Same");
                 }
               }}
             >

@@ -18,7 +18,9 @@ export default async function LogoutService() {
       if (r.status === 200) {
         alertService(null, "Logout Success");
 
-        window.location.href = "/";
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 2000);
       }
     })
     .catch((e) => {});

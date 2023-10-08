@@ -1,8 +1,8 @@
-const AlertLogin = () => {
+const Alert = () => {
   return (
     <>
       {/* alert error start  */}
-      <div className=" fixed z-10 w-full flex justify-center left-0 px-5 -top-[200px]">
+      <div className=" fixed z-10 w-full flex justify-center left-0 px-5 -top-[150px]">
         <div id="alert-error" className="max-w-2xl w-full hidden">
           <div className="alert alert-error flex justify-center">
             <svg
@@ -28,7 +28,7 @@ const AlertLogin = () => {
 
       {/* alert success start */}
 
-      <div className=" fixed z-10 w-full flex justify-center left-0 px-5 -top-[200px]">
+      <div className=" fixed z-10 w-full flex justify-center left-0 px-5 -top-[150px]">
         <div id="alert-success" className="max-w-2xl w-full hidden">
           <div className="alert flex justify-center alert-success">
             <svg
@@ -55,4 +55,4 @@ const AlertLogin = () => {
   );
 };
 
-export default AlertLogin;
+export default Alert;

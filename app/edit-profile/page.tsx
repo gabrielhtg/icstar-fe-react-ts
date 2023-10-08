@@ -7,19 +7,37 @@ import React, { useEffect, useRef, useState } from "react";
 import fileToBlob from "../services/fileToBlob";
 import axios from "axios";
 import APILink from "../entities/APILink";
+import alertService from "../services/alertService";
 
 const EditProfile = () => {
   const [fotoProfil, setFotoProfil] = useState<any>();
-  const inputEmail: React.RefObject<HTMLInputElement> = useRef(null);
   const inputPassword: React.RefObject<HTMLInputElement> = useRef(null);
   const inputRepassword: React.RefObject<HTMLInputElement> = useRef(null);
   const inputFirstName: React.RefObject<HTMLInputElement> = useRef(null);
   const inputLastName: React.RefObject<HTMLInputElement> = useRef(null);
-  const inputAdmin: React.RefObject<HTMLSelectElement> = useRef(null);
   const inputFoto: React.RefObject<HTMLInputElement> = useRef(null);
+  const profilePict: React.RefObject<HTMLImageElement> = useRef(null);
 
   useEffect(() => {
-    console.log(fotoProfil);
+    axios.get(APILink.getUser).then((r) => {
+      inputFirstName.current!.value = r.data.data.firstName;
+      inputLastName.current!.value = r.data.data.lastName;
+    });
+
+    if (
+      inputFoto.current?.files != null &&
+      inputFoto.current.files[0] == null
+    ) {
+      axios.get(APILink.profilePict).then((r) => {
+        if (r.data !== null) {
+          setFotoProfil(APILink.profilePict);
+          let logoProfil = document.querySelector("#logo-profil");
+          profilePict.current?.classList.remove("hidden");
+          logoProfil?.classList.add("hidden");
+          console.log(fotoProfil);
+        }
+      });
+    }
   }, [fotoProfil]);
   return (
     <>
@@ -34,10 +52,12 @@ const EditProfile = () => {
                   <div className="w-full h-full flex justify-center items-center">
                     <Image
                       id="foto-profil-baru"
+                      ref={profilePict}
                       src={fotoProfil}
                       alt="foto-profil"
                       width={100}
                       height={100}
+                      unoptimized={true}
                       className="hidden"
                     ></Image>
                     <BsFillPersonFill
@@ -78,7 +98,7 @@ const EditProfile = () => {
             <div className="divider md:divider-horizontal"></div>
 
             <div className="grid card bg-base-300 rounded-box p-5 md:w-1/2">
-              <div className="flex flex-col mt-5">
+              <div className="flex flex-col ">
                 <h1 className=" text-primary font-semibold mb-2">Password</h1>
                 <input
                   id="input-password"
@@ -88,6 +108,9 @@ const EditProfile = () => {
                   className="input input-bordered w-full"
                 />
               </div>
+              <span className="text-sm ml-2 mt-1">
+                Leave it blank if you don&apos;t want to change it
+              </span>
 
               <div className="flex flex-col mt-5">
                 <h1 className=" text-primary font-semibold mb-2">
@@ -101,6 +124,9 @@ const EditProfile = () => {
                   className="input input-bordered w-full"
                 />
               </div>
+              <span className="text-sm ml-2 mt-1">
+                Leave it blank if you don&apos;t want to change it
+              </span>
 
               <div className="flex flex-col mt-5">
                 <h1 className=" text-primary font-semibold mb-2">First Name</h1>
@@ -124,7 +150,7 @@ const EditProfile = () => {
                 />
               </div>
 
-              <div className="flex flex-col mt-5">
+              {/* <div className="flex flex-col mt-5">
                 <h1 className=" text-primary font-semibold mb-2">Admin</h1>
                 <select
                   id="input-admin"
@@ -134,7 +160,7 @@ const EditProfile = () => {
                   <option value={"selected"}>No</option>
                   <option>Yes</option>
                 </select>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -146,37 +172,29 @@ const EditProfile = () => {
             <button
               className="btn btn-primary btn-wide"
               onClick={() => {
-                let emailValue = inputEmail.current!.value;
                 let passwordValue = inputPassword.current!.value;
                 let rePasswordValue = inputRepassword.current!.value;
                 let firstName = inputFirstName.current!.value;
                 let lastName = inputLastName.current!.value;
-                let admin = inputAdmin.current!.value;
 
-                let setAdmin = "";
+                let userEmail: string;
 
-                if (admin === "Yes") {
-                  setAdmin = "true";
-                } else {
-                  setAdmin = "false";
-                }
+                axios.get(APILink.getUser).then((r) => {
+                  userEmail = r.data.data.email;
+                });
 
                 const formData = new FormData();
-
-                const link = new APILink();
 
                 if (
                   passwordValue === rePasswordValue &&
                   (passwordValue !== "" || rePasswordValue !== "")
                 ) {
-                  let url = link.registerUser;
+                  let url = APILink.editProfile;
 
                   const reqBody = {
-                    email: emailValue,
                     password: passwordValue,
                     firstName: firstName,
                     lastName: lastName,
-                    admin: setAdmin,
                   };
 
                   console.log(reqBody);
@@ -192,24 +210,58 @@ const EditProfile = () => {
                           );
 
                           axios
-                            .post(link.registerFotoProfil, formData, {
+                            .post(APILink.registerFotoProfil, formData, {
                               headers: {
                                 "Content-Type": "multipart/form-data",
-                                email: emailValue,
+                                email: userEmail,
                               },
                             })
-                            .then((r) => {
-                              console.log(r.status);
-                            })
+                            .then((r) => {})
                             .catch((e) => {});
                         }
+                        alertService(null, "Profile Changed");
+                        setTimeout(() => {
+                          window.location.reload();
+                        }, 2000);
+                      }
+                    })
+                    .catch((e) => {});
+                } else if (passwordValue === "" || rePasswordValue === "") {
+                  const reqBody = {
+                    firstName: firstName,
+                    lastName: lastName,
+                  };
+                  axios
+                    .post(APILink.editProfile, reqBody)
+                    .then((r) => {
+                      if (r.status === 200) {
+                        if (inputFoto.current?.files != null) {
+                          formData.append(
+                            "fotoProfil",
+                            inputFoto.current?.files[0]
+                          );
+
+                          axios
+                            .post(APILink.registerFotoProfil, formData, {
+                              headers: {
+                                "Content-Type": "multipart/form-data",
+                                email: userEmail,
+                              },
+                            })
+                            .then((r) => {})
+                            .catch((e) => {});
+                        }
+                        alertService(null, "Profile Changed");
+                        setTimeout(() => {
+                          window.location.reload();
+                        }, 2000);
                       }
                     })
                     .catch((e) => {});
                 }
               }}
             >
-              Register New User
+              Save Changes
             </button>
           </div>
         </div>

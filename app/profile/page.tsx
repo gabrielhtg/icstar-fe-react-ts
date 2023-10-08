@@ -16,10 +16,8 @@ const Profile = () => {
   const [fotoProfil, setFotoProfil] = useState("");
 
   useEffect(() => {
-    const link = new APILink();
-
     axios
-      .get(link.getUser)
+      .get(APILink.getUser)
       .then((r) => {
         if (r.status === 200) {
           console.log(r.data.data);
@@ -28,7 +26,7 @@ const Profile = () => {
           setFirstName(r.data.data.firstName);
           setLastName(r.data.data.lastName);
           setAdmin(r.data.data.admin);
-          setFotoProfil(link.profilePict);
+          setFotoProfil(APILink.profilePict);
         }
       })
       .catch((e) => {});
@@ -50,6 +48,7 @@ const Profile = () => {
                     width={150}
                     height={150}
                     priority={true}
+                    unoptimized={true}
                   ></Image>
                 </div>
               </div>

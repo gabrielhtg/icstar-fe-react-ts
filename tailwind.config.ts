@@ -18,6 +18,9 @@ const config: Config = {
       warnabtn: "#04019A",
       warnadua: "#5E3EDD",
       bgUtama: "#F0F4F8",
+      warnaHot: "#F10808",
+      warnaWarm: "#FFA217",
+      warnaCold: "#0D7BE0",
     },
     daisyui: {
       themes: ["light", "dark"],
