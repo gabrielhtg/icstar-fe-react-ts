@@ -199,8 +199,6 @@ const AddUser = () => {
 
                 const formData = new FormData();
 
-                const link = new APILink();
-
                 if (
                   passwordValue === rePasswordValue &&
                   (passwordValue !== "" || rePasswordValue !== "")
@@ -232,6 +230,9 @@ const AddUser = () => {
                             })
                             .then((r) => {
                               alertService(null, "Success Adding New User");
+                              setTimeout(() => {
+                                window.location.reload();
+                              }, 2000);
                             })
                             .catch((e) => {
                               alertService(

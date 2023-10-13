@@ -21,6 +21,7 @@ const config: Config = {
       warnaHot: "#F10808",
       warnaWarm: "#FFA217",
       warnaCold: "#0D7BE0",
+      successHover: "#2FB986",
     },
     daisyui: {
       themes: ["light", "dark"],

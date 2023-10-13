@@ -15,6 +15,11 @@ class APILink {
   static getWarmRevenue = "/api/get-warm-revenue";
   static getWarmGross = "/api/get-warm-gross";
   static getAllUsers = "/api/get-all-users";
+  static getTotalBusinessUnit = "/api/get-total-by-busines-units";
+  static getByPipelineStatus = "/api/get-all-by-pipelineStatus";
+  static getAllByBusinessUnit = "/api/get-all-by-business-unit";
+  static removeUser = "/api/remove-user";
+  static editProfileByEmail = "/api/edit-profile-by-email";
 }
 
 export default APILink;

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import APILink from "@/app/entities/APILink";
 import axios from "axios";
+import Link from "next/link";
 
 const Pipeline = () => {
   const [hotRevenue, setHotRevenue] = useState(0);
@@ -48,44 +49,50 @@ const Pipeline = () => {
   return (
     <>
       <div className="w-full flex flex-wrap justify-center gap-20 mt-[40px]">
-        <div className="flex flex-col items-center justify-center bg-base-100 w-[300px] h-[200px] rounded-lg border-primary hover:border-2 ">
-          <div>
-            <span className="font-bold text-warnaHot text-lg">HOT</span>
-
+        <Link href={"/pipeline-detail/hot"}>
+          <div className="flex flex-col items-center justify-center bg-base-100 p-10 shadow-lg rounded-lg border-primary border-2 border-transparent hover:border-primary">
             <div>
-              <div className="flex flex-col mt-5 gap-4">
-                <span>Revenue : {formatRupiah(hotRevenue)}</span>
-                <span>Gross Profit : {formatRupiah(hotGrossProfit)}</span>
+              <span className="font-bold text-warnaHot text-lg">HOT</span>
+
+              <div>
+                <div className="flex flex-col mt-5 gap-4">
+                  <span>Revenue : {formatRupiah(hotRevenue)}</span>
+                  <span>Gross Profit : {formatRupiah(hotGrossProfit)}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </Link>
 
-        <div className="flex flex-col items-center justify-center bg-base-100 w-[300px] h-[200px] rounded-lg border-primary hover:border-2 ">
-          <div>
-            <span className="font-bold text-warnaWarm text-lg">WARM</span>
-
+        <Link href={"/pipeline-detail/warm"}>
+          <div className="flex flex-col items-center justify-center bg-base-100 p-10 shadow-lg rounded-lg border-2 border-transparent hover:border-primary ">
             <div>
-              <div className="flex flex-col mt-5 gap-4">
-                <span>Revenue : {formatRupiah(warmRevenue)}</span>
-                <span>Gross Profit : {formatRupiah(warmGrossProfit)}</span>
+              <span className="font-bold text-warnaWarm text-lg">WARM</span>
+
+              <div>
+                <div className="flex flex-col mt-5 gap-4">
+                  <span>Revenue : {formatRupiah(warmRevenue)}</span>
+                  <span>Gross Profit : {formatRupiah(warmGrossProfit)}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </Link>
 
-        <div className="flex flex-col items-center justify-center bg-base-100 w-[300px] h-[200px] rounded-lg border-primary hover:border-2 ">
-          <div>
-            <span className="font-bold text-warnaCold text-lg">COLD</span>
-
+        <Link href={"/pipeline-detail/cold"}>
+          <div className="flex flex-col items-center justify-center bg-base-100 p-10 shadow-lg rounded-lg border-primary hover:border-2 ">
             <div>
-              <div className="flex flex-col mt-5 gap-4">
-                <span>Revenue : {formatRupiah(coldRevenue)}</span>
-                <span>Gross Profit : {formatRupiah(coldGrossProfit)}</span>
+              <span className="font-bold text-warnaCold text-lg">COLD</span>
+
+              <div>
+                <div className="flex flex-col mt-5 gap-4">
+                  <span>Revenue : {formatRupiah(coldRevenue)}</span>
+                  <span>Gross Profit : {formatRupiah(coldGrossProfit)}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </Link>
       </div>
     </>
   );
