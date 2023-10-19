@@ -11,13 +11,16 @@ import { BsFillPersonFill } from "react-icons/bs";
 
 const TableRow = (props: any) => {
   useEffect(() => {
-    // const inputFoto: any = document.getElementById(`inputFoto-${props.email}`);
-    // const inputPassword: any = document.getElementById(
-    //   `inputPassword-${props.email}`
-    // );
-    // const inputRePass: any = document.getElementById(
-    //   `inputRePass-${props.email}`
-    // );
+    if (props.foto != null) {
+      let elementFotoBaru = document.getElementById(
+        `foto-profil-baru-${props.email}`
+      );
+
+      let logoProfil = document.getElementById(`logo-profil-${props.email}`);
+
+      elementFotoBaru?.classList.remove("hidden");
+      logoProfil?.classList.add("hidden");
+    }
 
     const inputAdmin: any = document.getElementById(
       `inputAdmin-${props.email}`
@@ -126,7 +129,7 @@ const TableRow = (props: any) => {
             >
               <AiFillEdit size={20} />
             </button>
-            <dialog id={`edit-${props.email}`} className="modal">
+            <dialog id={`edit-${props.email}`} className="z-10 modal ">
               <div className="modal-box w-11/12 max-w-none">
                 <form method="dialog">
                   {/* if there is a button in form, it will close the modal */}
@@ -142,16 +145,16 @@ const TableRow = (props: any) => {
                           <div className="w-28 sm:w-36 md:w-40 lg:w-56 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                             <div className="w-full h-full flex justify-center items-center">
                               <Image
-                                id="foto-profil-baru"
+                                id={`foto-profil-baru-${props.email}`}
                                 src={`data:image/png;base64,${props.foto}`}
                                 alt="foto-profil"
                                 width={100}
                                 height={100}
                                 unoptimized={true}
-                                // className="hidden"
+                                className="hidden"
                               ></Image>
                               <BsFillPersonFill
-                                id="logo-profil"
+                                id={`logo-profil-${props.email}`}
                                 className=" w-8/12 h-full"
                               />
                             </div>
@@ -169,16 +172,19 @@ const TableRow = (props: any) => {
                             accept=".png, .jpg, .jpeg"
                             className="file-input file-input-bordered w-full"
                             onChange={() => {
-                              let inputFoto =
-                                document.querySelector("#input-foto");
-                              let elementFotoBaru =
-                                document.querySelector("#foto-profil-baru");
+                              let inputFoto: any = document.getElementById(
+                                `inputFoto-${props.email}`
+                              );
+                              let elementFotoBaru: any =
+                                document.getElementById(
+                                  `foto-profil-baru-${props.email}`
+                                );
 
-                              let logoProfil =
-                                document.querySelector("#logo-profil");
+                              let logoProfil = document.getElementById(
+                                `logo-profil-${props.email}`
+                              );
 
-                              // setfoto(fileToBlob(inputFoto));
-
+                              elementFotoBaru.src = fileToBlob(inputFoto);
                               elementFotoBaru?.classList.remove("hidden");
                               logoProfil?.classList.add("hidden");
                             }}
@@ -259,134 +265,136 @@ const TableRow = (props: any) => {
                     </div>
 
                     <div className="mt-10 flex flex-wrap gap-5 justify-center mb-16">
-                      <button
-                        className="btn btn-primary btn-wide"
-                        onClick={() => {
-                          const inputFoto: any = document.getElementById(
-                            `inputFoto-${props.email}`
-                          );
-                          const inputPassword: any = document.getElementById(
-                            `inputPassword-${props.email}`
-                          );
-                          const inputRePass: any = document.getElementById(
-                            `inputRePass-${props.email}`
-                          );
-                          const inputFirstName: any = document.getElementById(
-                            `inputFirstName-${props.email}`
-                          );
-                          const inputLastName: any = document.getElementById(
-                            `inputLastName-${props.email}`
-                          );
-                          const inputAdmin: any = document.getElementById(
-                            `inputAdmin-${props.email}`
-                          );
+                      <form method="dialog">
+                        <button
+                          className="btn btn-primary btn-wide"
+                          onClick={() => {
+                            const inputFoto: any = document.getElementById(
+                              `inputFoto-${props.email}`
+                            );
+                            const inputPassword: any = document.getElementById(
+                              `inputPassword-${props.email}`
+                            );
+                            const inputRePass: any = document.getElementById(
+                              `inputRePass-${props.email}`
+                            );
+                            const inputFirstName: any = document.getElementById(
+                              `inputFirstName-${props.email}`
+                            );
+                            const inputLastName: any = document.getElementById(
+                              `inputLastName-${props.email}`
+                            );
+                            const inputAdmin: any = document.getElementById(
+                              `inputAdmin-${props.email}`
+                            );
 
-                          const formData = new FormData();
+                            const formData = new FormData();
 
-                          let isAdmin = false;
+                            let isAdmin = false;
 
-                          if (inputAdmin.value === "Yes") {
-                            isAdmin = true;
-                          }
+                            if (inputAdmin.value === "Yes") {
+                              isAdmin = true;
+                            }
 
-                          if (
-                            inputPassword.value === inputRePass.value &&
-                            (inputPassword.value !== "" ||
-                              inputRePass.value !== "")
-                          ) {
-                            const reqBody = {
-                              password: inputPassword.value,
-                              firstName: inputFirstName.value,
-                              lastName: inputLastName.value,
-                              admin: isAdmin,
-                            };
+                            if (
+                              inputPassword.value === inputRePass.value &&
+                              (inputPassword.value !== "" ||
+                                inputRePass.value !== "")
+                            ) {
+                              const reqBody = {
+                                password: inputPassword.value,
+                                firstName: inputFirstName.value,
+                                lastName: inputLastName.value,
+                                admin: isAdmin,
+                              };
 
-                            axios
-                              .post(APILink.editProfileByEmail, reqBody, {
-                                params: {
-                                  email: props.email,
-                                },
-                              })
-                              .then((r) => {
-                                if (r.status === 200) {
-                                  if (inputFoto.current?.files != null) {
-                                    formData.append(
-                                      "fotoProfil",
-                                      inputFoto.current?.files[0]
-                                    );
+                              axios
+                                .post(APILink.editProfileByEmail, reqBody, {
+                                  params: {
+                                    email: props.email,
+                                  },
+                                })
+                                .then((r) => {
+                                  if (r.status === 200) {
+                                    if (inputFoto.current?.files != null) {
+                                      formData.append(
+                                        "fotoProfil",
+                                        inputFoto.current?.files[0]
+                                      );
 
-                                    axios
-                                      .post(
-                                        APILink.registerFotoProfil,
-                                        formData,
-                                        {
-                                          headers: {
-                                            "Content-Type":
-                                              "multipart/form-data",
-                                            email: props.email,
-                                          },
-                                        }
-                                      )
-                                      .then((r) => {})
-                                      .catch((e) => {});
+                                      axios
+                                        .post(
+                                          APILink.registerFotoProfil,
+                                          formData,
+                                          {
+                                            headers: {
+                                              "Content-Type":
+                                                "multipart/form-data",
+                                              email: props.email,
+                                            },
+                                          }
+                                        )
+                                        .then((r) => {})
+                                        .catch((e) => {});
+                                    }
+                                    alertService(null, "Profile Changed");
+                                    setTimeout(() => {
+                                      window.location.reload();
+                                    }, 2000);
                                   }
-                                  alertService(null, "Profile Changed");
-                                  setTimeout(() => {
-                                    window.location.reload();
-                                  }, 2000);
-                                }
-                              })
-                              .catch((e) => {});
-                          } else if (
-                            inputPassword.value === "" ||
-                            inputRePass.value === ""
-                          ) {
-                            const reqBody = {
-                              firstName: inputFirstName.value,
-                              lastName: inputLastName.value,
-                              admin: isAdmin,
-                            };
-                            axios
-                              .post(APILink.editProfileByEmail, reqBody, {
-                                params: {
-                                  email: props.email,
-                                },
-                              })
-                              .then((r) => {
-                                if (r.status === 200) {
-                                  if (inputFoto.current?.files != null) {
-                                    formData.append(
-                                      "fotoProfil",
-                                      inputFoto.current?.files[0]
-                                    );
+                                })
+                                .catch((e) => {});
+                            } else if (
+                              inputPassword.value === "" ||
+                              inputRePass.value === ""
+                            ) {
+                              const reqBody = {
+                                firstName: inputFirstName.value,
+                                lastName: inputLastName.value,
+                                admin: isAdmin,
+                              };
+                              axios
+                                .post(APILink.editProfileByEmail, reqBody, {
+                                  params: {
+                                    email: props.email,
+                                  },
+                                })
+                                .then((r) => {
+                                  if (r.status === 200) {
+                                    if (inputFoto.current?.files != null) {
+                                      formData.append(
+                                        "fotoProfil",
+                                        inputFoto.current?.files[0]
+                                      );
 
-                                    axios
-                                      .post(
-                                        APILink.registerFotoProfil,
-                                        formData,
-                                        {
-                                          headers: {
-                                            "Content-Type":
-                                              "multipart/form-data",
-                                            email: props.email,
-                                          },
-                                        }
-                                      )
-                                      .then((r) => {})
-                                      .catch((e) => {});
+                                      axios
+                                        .post(
+                                          APILink.registerFotoProfil,
+                                          formData,
+                                          {
+                                            headers: {
+                                              "Content-Type":
+                                                "multipart/form-data",
+                                              email: props.email,
+                                            },
+                                          }
+                                        )
+                                        .then((r) => {})
+                                        .catch((e) => {});
+                                    }
+                                    alertService(null, "Profile Changed");
+                                    setTimeout(() => {
+                                      window.location.reload();
+                                    }, 2000);
                                   }
-                                  alertService(null, "Profile Changed");
-                                  setTimeout(() => {
-                                    window.location.reload();
-                                  }, 2000);
-                                }
-                              })
-                              .catch((e) => {});
-                          }
-                        }}
-                      >
-                        Save Changes
-                      </button>
+                                })
+                                .catch((e) => {});
+                            }
+                          }}
+                        >
+                          Save Changes
+                        </button>
+                      </form>
                     </div>
                   </div>
                 </div>

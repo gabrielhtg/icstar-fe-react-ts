@@ -20,6 +20,8 @@ class APILink {
   static getAllByBusinessUnit = "/api/get-all-by-business-unit";
   static removeUser = "/api/remove-user";
   static editProfileByEmail = "/api/edit-profile-by-email";
+  static uploadFileExcel = "/api/upload-excel";
+  static isAdmin = "/api/is-admin";
 }
 
 export default APILink;

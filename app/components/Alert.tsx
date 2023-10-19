@@ -2,9 +2,9 @@ const Alert = () => {
   return (
     <>
       {/* alert error start  */}
-      <div className=" fixed z-10 w-full flex justify-center left-0 px-5 -top-[150px]">
-        <div id="alert-error" className="max-w-2xl w-full hidden">
-          <div className="alert alert-error flex justify-center">
+      <div className=" fixed z-50 w-full flex justify-center left-0 px-5 -top-[150px]">
+        <div id="alert-error" className="max-w-2xl z-50 w-full hidden">
+          <div className="alert alert-error z-50 flex justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="stroke-current shrink-0 h-6 w-6"
@@ -28,9 +28,9 @@ const Alert = () => {
 
       {/* alert success start */}
 
-      <div className=" fixed z-10 w-full flex justify-center left-0 px-5 -top-[150px]">
-        <div id="alert-success" className="max-w-2xl w-full hidden">
-          <div className="alert flex justify-center alert-success">
+      <div className=" fixed z-50 w-full flex justify-center left-0 px-5 -top-[150px]">
+        <div id="alert-success" className="max-w-2xl z-50 w-full hidden">
+          <div className="alert flex z-50 justify-center alert-success">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="stroke-current shrink-0 h-6 w-6"

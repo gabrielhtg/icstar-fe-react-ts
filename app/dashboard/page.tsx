@@ -14,10 +14,6 @@ export default function Dashboard() {
               <h1 className="text-base-100 text-[35px] pt-32 self-start">
                 <strong>Revenue Achievement</strong>
               </h1>
-              <input
-                type="file"
-                className="file-input file-input-bordered w-full max-w-xs self-end mt-32"
-              />
             </div>
           </div>
 
